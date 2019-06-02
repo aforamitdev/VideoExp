@@ -1,31 +1,42 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <button @click="getFilesFromUser">Get Files</button>
+    <p>{{getAllFiles}}</p>
+
+    <button @click="closeAll">Close</button>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script>
+import { mapGetters, mapActions } from "vuex";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+export default {
+  name: "App",
+  methods: {
+    ...mapActions(["getFilesFromUser", "closeAll"])
+  },
+  computed: {
+    ...mapGetters(["getAllFiles"])
+  }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  // data: function() {
+  //   return {
+  //     files: ""
+  //   };
+  // },
+  // beforeCreate() {
+  //   ipcRenderer.on("channel1", (e, files) => {
+  //     this.files = files;
+  //   });
+  // },
+  // methods: {
+  //   clicked: function() {
+  //     ipcRenderer.send("channel1", "The button is clicked");
+  //   }
+  // }
+};
+
+// l
+</script>
+
+
