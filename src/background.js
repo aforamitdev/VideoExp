@@ -1,6 +1,10 @@
 "use strict";
 
-const { getFileFromUserSelection } = require("./ipcProcess");
+const {
+  getFileFromUserSelection,
+  getParentFolderContent,
+  readStateSavedOnJson
+} = require("./ipcProcess");
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
@@ -26,8 +30,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
-    },
-    frame: false
+    }
+    // frame: false
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -63,6 +67,8 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+console.log(app.getAppPath());
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -100,6 +106,22 @@ if (isDevelopment) {
 ipcMain.on("GetFiles", (e, args) => {
   const files = getFileFromUserSelection();
   e.reply("GetFiles", files);
+});
+
+// parent folder content
+
+ipcMain.on("getParentFolder", (e, args) => {
+  console.log("exe");
+  const folders = getParentFolderContent();
+  console.log(folders);
+  e.reply("getParentFolder", folders);
+});
+
+// getting store
+
+ipcMain.on("readStateFromJson", (e, args) => {
+  const store = readStateSavedOnJson();
+  e.reply("readStateFromJson", store);
 });
 
 // clicking close button will create a json file with crrunt state
