@@ -6,15 +6,29 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     files: [],
-    parentFolder: null
+    parentFolder: null,
+    courses: [
+      {
+        name: "",
+        path: "",
+        subFolders: [
+          {
+            name: "",
+            path: "",
+            extantion: ""
+          }
+        ]
+      }
+    ]
   },
 
   // ! --------------------Getters--------------------  --------------------Getters--------------------  --------------------Getters--------------------
 
   getters: {
-    getAllFiles: state => state.files,
+    getAllFiles: state => state.courses,
     parentFolder: state => state.parentFolder,
-    getState: state => state
+    getState: state => state,
+    coursesName: state => state.courses
   },
 
   // ! ---------------------actions---------------------- ---------------------actions----------------------  ---------------------actions----------------------
@@ -23,7 +37,8 @@ export default new Vuex.Store({
     getFilesFromUser({ commit }) {
       ipcRenderer.send("GetFiles", "The button is clicked");
       ipcRenderer.on("GetFiles", (e, files) => {
-        commit("AddFiles", files);
+        const folderObject = { files, name };
+        commit("AddFiles", folderObject);
       });
     },
     closeAll({ commit }) {
@@ -50,8 +65,8 @@ export default new Vuex.Store({
   // ! ------------------------ mutations------------------------- ------------------------ mutations------------------------- ------------------------ mutations-------------------------
 
   mutations: {
-    AddFiles: (state, files) => {
-      state.files = files;
+    AddFiles: (state, folderObject) => {
+      state.courses.push(folderObject);
     },
     ParentFolderContent: (state, folders) => {
       state.parentFolder = folders;
